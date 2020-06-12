@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-xs-12">
+    <form (ngSubmit)="onSubmit()" [formGroup]="importerForm">
+      <div class="form-group">
+        <label for="itemID">Resource ID (if applicable)</label>
+        <input
+          type="text"
+          id="itemID"
+          formControlName="itemID"
+          placeholder="Type a item ID..."
+          class="form-control"
+        >
+      </div>
+      <div class="form-group">
+        <label for="requestType">Request Type</label>
+        <div class="radio" *ngFor="let option of availableEndpoints">
+          <label>
+            <input
+              type="radio"
+              id="requestType"
+              formControlName="requestType"
+              [value]="option.value"
+            >{{ option.label | titlecase }}
+          </label>
+        </div>
+      </div>
+      <div class="row" formArrayName="queryParams">
+        <label>Query Params</label>
+        <div class="col-xs-12">
+          <div class="row form-group" *ngFor="let queryParam of queryParamsControls; let i = index" [formGroupName]="i">
+            <div class="col-xs-4">
+              <label for="queryKey">Key</label>
+              <input class="form-control" type="text" id="queryKey" formControlName="key" placeholder="Key...">
+            </div>
+            <div class="col-xs-7">
+              <label for="queryValue">Value</label>
+              <input class="form-control" type="text" id="queryValue" formControlName="value" placeholder="Value...">
+            </div>
+            <div class="col-xs-1">
+              <button class="form-control" class="btn btn-danger bottom" (click)="deleteQueryParam(i)" style="margin-top: 25px">X</button>
+            </div>
+          </div>
+          <button class="btn btn-default" (click)="addQueryParam($event)">Add Query Param</button>
+        </div>
+      </div>
+      <hr>
+      <span class="help-block" *ngIf="importerForm.invalid && importerForm.touched">There are several errors to fix!</span>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success" [disabled]="importerForm.invalid" type="submit">Request</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
